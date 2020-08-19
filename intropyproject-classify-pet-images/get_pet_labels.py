@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/get_pet_labels.py
 #                                                                             
-# PROGRAMMER: 
-# DATE CREATED:                                  
+# PROGRAMMER: Victor B.
+# DATE CREATED: 17/08/2020 22:15                                 
 # REVISED DATE: 
 # PURPOSE: Create the function get_pet_labels that creates the pet labels from 
 #          the image's filename. This function inputs: 
@@ -18,6 +18,18 @@
 ##
 # Imports python modules
 from os import listdir
+
+
+def clean_filename(filename):
+    words_filename = filename.split("_")
+    only_words = [word.strip().lower() for word in words_filename if word.isalpha()]
+    pet_name = " ".join(only_words)
+    
+    print("Filename={} Label={}".format(filename, pet_name))
+    
+    return pet_name
+    
+    
 
 # TODO 2: Define get_pet_labels function below please be certain to replace None
 #       in the return statement with results_dic dictionary that you create 
@@ -40,6 +52,25 @@ def get_pet_labels(image_dir):
       List. The list contains for following item:
          index 0 = pet image label (string)
     """
-    # Replace None with the results_dic dictionary that you created with this
-    # function
-    return None
+    
+    filename_list = listdir(image_dir)
+    filenames = []
+    results_dic = dict()
+    
+    for index in range(0, len(filename_list), 1):
+        filename = filename_list[index]
+        print("{:2d} file: {:>25}".format(index + 1, filename))
+        filenames.append(filename)
+    
+    pet_labels = [[filename, clean_filename(filename)] for filename in filenames]
+    
+    for index in range(0, len(pet_labels), 1):
+        filename = pet_labels[index][0]
+        pet_label = pet_labels[index][1]
+        
+        if filename not in results_dic:
+            results_dic[filename] = [pet_label]
+        else:
+            print("** Warning: Key={} already exist with value={}".format(filename, results_dic[filename]))  
+
+    return results_dic
